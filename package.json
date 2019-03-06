@@ -32,5 +32,6 @@
   "bugs": {
     "url": "https://github.com/xochil73/08lab/issues"
   },
-  "homepage": "https://github.com/xochil73/08lab#readme"
+  "homepage": "https://github.com/xochil73/08lab#readme",
+  "devDependencies": {}
 }
