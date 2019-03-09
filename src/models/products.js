@@ -1,65 +1,30 @@
 'use strict';
 
-const uuid = require('uuid/v4');
-
-const schema = {
-    id: {required: true},
-    record: {required: true},
-};
+const schema = require('./products-schema.js');
 
 class Products {
 
     constructor() {
-        this.database = [];
     }
 
-    get(id) {
-        let response = id ? this.database.filter((record) => record.id === id) : this.database;
-        return Promise.resolve(response);
+    get(_id) {
+        let queryObject = _id ? {_id} : { };
+        return schema.find(queryObject);
     }
 
-    post(entry) {
-        entry.id = uuid();
-        let record = this.sanitize(entry);
-        if (record.id) {
-            this.database.push(record);
-        }
-        return Promise.resolve(record);
+    post(record) {
+        let newRecord = new schema(record);
+        return newRecord.save();
     }
 
-    put(id, entry) {
-        let record = this.sanitze(entry);
-        if (record.id) {
-            this.database = this.database.map((item) => (item.id === id) ? record : item);
-        }
-        return Promise.resolve(record);
+    put(_id, record) {
+        return schema.findByIdAndUpdate(_id, record, {new:true});
     }
 
-    delete(id) {
-        this.database = this.database.filter((record) => record.id !== id);
-        return Promise.resolve();
+    delete(_id) {
+        return schema.findByIdAndDelete(_id);
     }
 
-    sanitize(entry) {
-
-        let valid = true;
-        let record = {};
-
-        Object.keys(schema).forEach(field => {
-            if (schema[field].required) {
-                if (entry[field]) {
-                    record[field] = entry[field];
-                } else {
-                    valid = false;
-                }
-            } else {
-                record[field] = entry[field];
-            }
-        });
-
-        return valid ? record : undefined;
-    }
 }
-
 
 module.exports = Products;
