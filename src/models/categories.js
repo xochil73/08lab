@@ -15,6 +15,7 @@ class Categories {
 
     get(id) {
         let response = id ? this.database.filter((record) => record.id === id) : this.database;
+        console.log(response, 'I am a response');
         return Promise.resolve(response);
     }
 
@@ -32,6 +33,7 @@ class Categories {
         if (record.id) {
             this.database = this.database.map((item) => (item.id === id) ? record : item);
         }
+        console.log(record, 'put record');
         return Promise.resolve(record);
     }
 
